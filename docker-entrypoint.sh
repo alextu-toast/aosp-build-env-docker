@@ -25,6 +25,6 @@ chown ${HOST_USER_ID}:${HOST_USER_GID} /home/${DOCKER_USER} -R
 #adduser ${DOCKER_USER} sudo
 
 #change to /workdir after login
-echo "cd /workdir" > /home/${DOCKER_USER}/.bashrc
+echo "cd /workdir" >> /home/${DOCKER_USER}/.bashrc
 
 su - "${DOCKER_USER}" -c bash

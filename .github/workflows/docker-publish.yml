@@ -10,7 +10,7 @@ on:
   push:
     # Publish `main` as Docker `latest` image.
     branches:
-      - dev
+      - i700
 
     # Publish `v1.2.3` tags as releases.
     tags:
@@ -86,6 +86,6 @@ jobs:
           echo VERSION=$VERSION
 
           docker tag $IMAGE_NAME-18.04 $IMAGE_ID:$VERSION
-          docker tag $IMAGE_NAME-18.04 $IMAGE_ID:bionic
-          #docker push $IMAGE_ID:$VERSION
+          #docker tag $IMAGE_NAME-18.04 $IMAGE_ID:bionic
+          docker push $IMAGE_ID:$VERSION
           #docker push $IMAGE_ID:bionic
