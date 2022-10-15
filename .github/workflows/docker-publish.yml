@@ -10,7 +10,7 @@ on:
   push:
     # Publish `main` as Docker `latest` image.
     branches:
-      - RK3399
+      - RK3399-A12
 
     # Publish `v1.2.3` tags as releases.
     tags:
