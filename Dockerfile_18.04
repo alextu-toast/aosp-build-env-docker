@@ -51,7 +51,7 @@ RUN apt-get update && apt-get install -y \
 # =============================================
 # ccache and change to /workdir which is bind from host.
 RUN apt-get update && apt-get install -y ccache
-RUN echo "export CCACHE_DIR=/ccache; export CCACHE_EXEC=/usr/bin/ccache; export USE_CCACHE=true; cd /workdir"  >>  /home/${USER}/.bashrc
+RUN echo "export CCACHE_DIR=/home/ubuntu/ccache; export CCACHE_EXEC=/usr/bin/ccache; export USE_CCACHE=true; cd /workdir"  >>  /home/${USER}/.bashrc
 
 # Update to latest
 RUN apt-get update && apt-get dist-upgrade -y && apt-get clean
