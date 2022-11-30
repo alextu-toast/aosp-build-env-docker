@@ -1,0 +1,73 @@
+FROM ubuntu:18.04
+MAINTAINER Alex Tu "alex.tu@toasttab.com"
+
+# =============================================
+# Set base environment
+# =============================================
+RUN apt-get update
+RUN apt-get install -y sudo openssl apt-utils
+
+WORKDIR /workdir
+
+# Define username and temporary uid and gid
+ENV USER=ubuntu USER_ID=1000 USER_GID=1000
+
+# now creating user, change password to 'ubuntu'
+RUN groupadd --gid "${USER_GID}" "${USER}" && \
+    useradd \
+      --uid ${USER_ID} \
+      --gid ${USER_GID} \
+      --create-home \
+      --shell /bin/bash\
+      --password $(openssl passwd -1 ubuntu)\
+      ${USER}
+
+#setup locale
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get install -y locales && dpkg-reconfigure locales --frontend noninteractive && locale-gen "en_US.UTF-8" && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
+
+# =============================================
+# Install AOSP build deps.
+# =============================================
+# AOSP, refer to https://source.android.com/setup/build/initializing
+RUN apt-get update && apt-get install -y \
+    git-core gnupg flex bison build-essential zip curl zlib1g-dev gcc-multilib g++-multilib \
+    libc6-dev-i386 libncurses5 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z1-dev \
+    libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig
+
+# AOSP, dependency that not be listed on websit (might because of docker)
+RUN apt-get update && apt-get install -y \
+    rsync python3
+
+# =============================================
+# Install rpi3 build deps.
+# =============================================
+# Kernel, depency of https://github.com/android-rpi/kernel_arpi
+RUN apt-get update && apt-get install -y bc \
+# pi 3, https://github.com/android-rpi/device_brcm_rpi3
+    gcc-arm-linux-gnueabihf libssl-dev
+
+
+# =============================================
+# Install project build deps.
+# =============================================
+RUN apt-get update && apt-get install -y cpio liblz4-tool gawk
+
+# =============================================
+# Prepare AOSP build environment
+# =============================================
+# ccache and change to /workdir which is bind from host.
+RUN apt-get update && apt-get install -y ccache
+RUN echo "export CCACHE_DIR=/ccache; export CCACHE_EXEC=/usr/bin/ccache; export USE_CCACHE=true; cd /workdir"  >>  /home/${USER}/.bashrc && \
+    ln -sf /usr/bin/python3 /usr/bin/python
+
+# Update to latest
+RUN apt-get update && apt-get dist-upgrade -y && sudo apt-get clean
+
+# The major duty of entry script is to sync the UID:GID between host and docker user.
+COPY docker-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["docker-entrypoint.sh"]
