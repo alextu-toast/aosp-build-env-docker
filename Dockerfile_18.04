@@ -55,7 +55,7 @@ RUN apt-get update && apt-get install -y bc \
 # =============================================
 # Install project build deps.
 # =============================================
-RUN apt-get update && apt-get install -y cpio liblz4-tool gawk
+RUN apt-get update && apt-get install -y cpio liblz4-tool gawk openjdk-8-jdk repo xmlstarlet wget
 
 # =============================================
 # Prepare AOSP build environment
