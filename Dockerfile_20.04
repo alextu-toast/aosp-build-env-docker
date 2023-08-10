@@ -47,7 +47,9 @@ RUN apt-get update && apt-get install -y \
 # Install project build deps.
 # =============================================
 RUN apt-get update &&\
-    DEBIAN_FRONTEND=noninteractive apt-get install -y cpio liblz4-tool gawk xmlstarlet libxml-simple-perl python3-distutils libssl-dev
+    DEBIAN_FRONTEND=noninteractive apt-get install -y cpio liblz4-tool gawk xmlstarlet libxml-simple-perl python3-distutils libssl-dev libc++-dev python3-pip
+RUN pip install cbor2
+RUN apt-get purge -y python3-pip
 
 # packages to standalone build.
 RUN apt-get update &&\
