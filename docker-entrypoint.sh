@@ -24,8 +24,7 @@ chown ${HOST_USER_ID}:${HOST_USER_GID} /home/${DOCKER_USER} -R
 #change to /workdir after login
 cat << EOF > /home/${DOCKER_USER}/.bashrc
 cd /workdir
-cd ci_engine
-source .cicd/config
+source .repo/manifests/ToastControl/jenkins/.cicd/tg3_envsetup.sh
 cd /workdir
 EOF
 if [ -n "$#" ]; then
