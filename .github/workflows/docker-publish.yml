@@ -11,6 +11,7 @@ on:
     # Publish `main` as Docker `latest` image.
     branches:
       - QCS6490_A13
+      - QCS6490_A14_TG3
 
     # Publish `v1.2.3` tags as releases.
     tags:
